@@ -1,6 +1,6 @@
 # mtg.py
 ## Описание
-mtg.py - Minecraft Table Generator. То есть он генерирует таблички из Minecraft c текстом.
+mtg.py - Minecraft Table Generator.<br>То есть он генерирует таблички из Minecraft c текстом.
 ## Пример
 ### Код **№1**:
 ```python
