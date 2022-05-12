@@ -6,7 +6,6 @@ from typing import Union, Optional, Any
 class Settings:
     def __init__(
         self,
-        max_chars_in_line: int=18,
         max_lines: int=4,
         std_xy: tuple[float, float]=(20.0, 50.0),
         font_size: int=71,
@@ -15,41 +14,51 @@ class Settings:
         dpath_font: Optional[str]=None
     ) -> None:
         self.MaxLines: int = max_lines
-        self.MaxCharsInLine: int = max_chars_in_line
-        self.MaxCharsAll: int = self.MaxLines * self.MaxCharsInLine
         self.StandartXY: tuple[float, float] = std_xy
         self.FontSize: int = font_size
         self.Spacing: int = spacing
         self.DefultsTablePath = mtgdata.default_table_path if (dpath_table is None) else os.path.abspath(dpath_table)
         self.DefultsFontPath = mtgdata.default_font_path if (dpath_font is None) else os.path.abspath(dpath_font)
 
-class data:
-    defults_colors: dict[str, tuple[int, int, int, int]] = {
-        "white": (255, 255, 255, 255),
-        "black": (0, 0, 0, 255),
-        "red": (255, 0, 0, 255),
-        "green": (0, 255, 0, 255),
-        "blue": (0, 0, 255, 255),
-        "yellow": (255, 247, 0, 255),
-        "orange": (255, 153, 0, 255),
-        "pink": (255, 0, 153, 255),
-        "purple": (174, 0, 255, 255),
-        "cyan": (0, 255, 238, 255),
-        "gold": (255, 213, 0, 255),
-        "marine": (0, 255, 179, 255)
-    }
+class Colors:
+    def __init__(self) -> None:
+        self.colors: dict[str, tuple[int, int, int, int]] = {
+            "white": (255, 255, 255, 255),
+            "black": (0, 0, 0, 255),
+            "red": (255, 0, 0, 255),
+            "green": (0, 255, 0, 255),
+            "blue": (0, 0, 255, 255),
+            "yellow": (255, 247, 0, 255),
+            "orange": (255, 153, 0, 255),
+            "pink": (255, 0, 153, 255),
+            "purple": (174, 0, 255, 255),
+            "cyan": (0, 255, 238, 255),
+            "gold": (255, 213, 0, 255),
+            "marine": (0, 255, 179, 255)
+        }
+    
+    def get_colors(self, full: bool=True) -> Union[dict[str, tuple[int, int, int, int]], list[str]]:
+        return (self.colors) if (full) else (list(self.colors.keys()))
+    
+    def add_color(self, name: str, value: tuple[int, int, int, int]) -> None:
+        self.colors[name] = value
+
+    def add_colors(self, data: dict[str, tuple[int, int, int, int]]) -> None:
+        for i in tuple(data.items()):
+            self.add_color(i[0], i[1])
 
 class ColorRGBA:
-    def __init__(self, d: Union[str, tuple]) -> None:
+    def __init__(self, d: Union[str, tuple], *, colors: Optional[Colors]=None) -> None:
+        colors = colors or Colors()
         if isinstance(d, str):
             try:
-                self.color: tuple[int, int, int, int] = data.defults_colors[d]
+                self.color: tuple[int, int, int, int] = colors.colors[d]
             except:
-                self.color: tuple[int, int, int, int] = data.defults_colors["black"]
+                self.color: tuple[int, int, int, int] = colors.colors["black"]
         elif isinstance(d, tuple):
             self.color: tuple[int, int, int, int] = d
         else:
-            self.color: tuple[int, int, int, int] = data.defults_colors["black"]
+            self.color: tuple[int, int, int, int] = colors.colors["black"]
 
 def spliterator(
     text: str,
@@ -81,12 +90,20 @@ def replaces(text: str, d: dict[str, str]) -> str:
 
 def handler_text(
     text: str,
+    img: Image.Image,
+    font: ImageFont.ImageFont,
     settings: Settings
 ) -> str:
     if "\n" in text:
         text = text.replace("\n", " ")
-    if not(len(text) <= settings.MaxCharsInLine):
-        text = text[:settings.MaxCharsInLine]
+    x_size = img.size[0] - (settings.StandartXY[0] * 2)
+    if not(font.getsize(text) <= x_size):
+        new_text = ""
+        for i in text:
+            if font.getsize(new_text + i) >= x_size:
+                return new_text
+            else:
+                new_text += i
     return text
 
 def get_xy(
@@ -117,9 +134,6 @@ def from_dict(d: dict[int, str], settings: Settings) -> list[str]:
             l.append(t)
     return l
 
-def get_defults_colors() -> dict[str, tuple[int, int, int, int]]:
-    return data.defults_colors
-
 def generate_table(
     text: Union[str, list[str], dict[int, str]],
     color: Optional[ColorRGBA]=None,
@@ -133,15 +147,15 @@ def generate_table(
     if isinstance(text, str):
         ltext = spliterator(text, image, font, settings)
     elif isinstance(text, list):
-        ltext = text
+        ltext = [handler_text(i, image, font, settings) for i in text]
     elif isinstance(text, dict):
-        ltext = from_dict(text, settings)
+        ltext = [handler_text(i, image, font, settings) for i in from_dict(text, settings)]
     else:
         raise TypeError()
 
     for idx, i in enumerate(ltext):
         image_draw.text(
-            text=handler_text(i, settings),
+            text=i,
             xy=get_xy(i, idx, image, font, settings),
             font=font,
             align="left",
