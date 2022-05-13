@@ -34,7 +34,8 @@ class Colors:
             "purple": (174, 0, 255, 255),
             "cyan": (0, 255, 238, 255),
             "gold": (255, 213, 0, 255),
-            "marine": (0, 255, 179, 255)
+            "marine": (0, 255, 179, 255),
+            "brown": (125, 75, 0, 255)
         }
     
     def get_colors(self, full: bool=True) -> Union[dict[str, tuple[int, int, int, int]], list[str]]:
