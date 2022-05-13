@@ -1,8 +1,39 @@
 import os
+import re
 from . import mtgdata
 from PIL import ImageDraw, ImageFont, Image
 from typing import Union, Optional, Any
 
+# Класс исключений
+class NotAHEXColour(Exception):
+    def __init__(self, *args, **kwargs) -> None:
+        """Calls if the `str` is not a `hex-colour`"""
+        if len(args) != 0:
+            self.msg = " ".join(args)
+        else:
+            if "colour" in kwargs.keys():
+                self.msg = "This '%s' is not a hex-colour" % kwargs["colour"]
+            else:
+                self.msg = "Not a hex-colour"
+    
+    def __str__(self) -> str:
+        return self.msg
+
+class NotAColour(Exception):
+    def __init__(self, *args, **kwargs) -> None:
+        """Calls if the `str` is not a `colour`"""
+        if len(args) != 0:
+            self.msg = " ".join(args)
+        else:
+            if "colour" in kwargs.keys():
+                self.msg = "This %s is not a colour" % kwargs["colour"]
+            else:
+                self.msg = "Not a colour"
+    
+    def __str__(self) -> str:
+        return self.msg
+
+# Классы
 class Settings:
     def __init__(
         self,
@@ -20,9 +51,9 @@ class Settings:
         self.DefultsTablePath = mtgdata.default_table_path if (dpath_table is None) else os.path.abspath(dpath_table)
         self.DefultsFontPath = mtgdata.default_font_path if (dpath_font is None) else os.path.abspath(dpath_font)
 
-class Colors:
+class ColoursRGBA:
     def __init__(self) -> None:
-        self.colors: dict[str, tuple[int, int, int, int]] = {
+        self.colours: dict[str, tuple[int, int, int, int]] = {
             "white": (255, 255, 255, 255),
             "black": (0, 0, 0, 255),
             "red": (255, 0, 0, 255),
@@ -38,28 +69,62 @@ class Colors:
             "brown": (125, 75, 0, 255)
         }
     
-    def get_colors(self, full: bool=True) -> Union[dict[str, tuple[int, int, int, int]], list[str]]:
-        return (self.colors) if (full) else (list(self.colors.keys()))
+    def is_hexcolour(self, value: str) -> tuple[bool, Union[tuple[int, int, int, int], None]]:
+        if value.startswith("#"):
+            value = value[1:]
+        if (len(value) == 6) or (len(value) == 8):
+            cl = [int(i, 16) for i in re.findall(r'..', value)]
+            for i in cl:
+                if not((i <= 255) and (i >= 0)):
+                    return False, None
+            if len(cl) != 4:
+                cl.append(255)
+            return True, tuple(cl)
+        else:
+            return False, None
     
-    def add_color(self, name: str, value: tuple[int, int, int, int]) -> None:
-        self.colors[name] = value
+    def is_colour(self, value: tuple[int, int, int, int]) -> tuple[bool, Union[tuple[int, int, int, int], None]]:
+        for i in value:
+            if not((i <= 255) and (i >= 0)):
+                return False, None
+        return True, value
+    
+    def get_colours(self, full_info: bool=True) -> Union[dict[str, tuple[int, int, int, int]], list[str]]:
+        return (self.colours) if (full_info) else (list(self.colours.keys()))
+    
+    def add_colour(self, name: str, value: tuple[int, int, int, int]) -> None:
+        if self.is_colour(value)[0]:
+            self.colours[name] = value
+        else:
+            raise NotAColour(colour=value)
 
-    def add_colors(self, data: dict[str, tuple[int, int, int, int]]) -> None:
-        for i in tuple(data.items()):
-            self.add_color(i[0], i[1])
+    def add_colours(self, data: dict[str, tuple[int, int, int, int]]) -> None:
+        for i in data.items():
+            self.add_colour(i[0], i[1])
+    
+    def add_hexcolour(self, name: str, value: str) -> None:
+        t = self.is_hexcolour(value)
+        if t[0]:
+            self.colours[name] = t[1]
+        else:
+            raise NotAHEXColour(colour=value)
+    
+    def add_hexcolours(self, data: dict[str, str]) -> None:
+        for i in data.items():
+            self.add_hexcolour(i[0], i[1])
 
-class ColorRGBA:
-    def __init__(self, d: Union[str, tuple], *, colors: Optional[Colors]=None) -> None:
-        colors = colors or Colors()
+class ColourRGBA:
+    def __init__(self, d: Union[str, tuple], *, colours: Optional[ColoursRGBA]=None) -> None:
+        colours = colours or ColoursRGBA()
         if isinstance(d, str):
             try:
-                self.color: tuple[int, int, int, int] = colors.colors[d]
+                self.colour: tuple[int, int, int, int] = colours.colours[d]
             except:
-                self.color: tuple[int, int, int, int] = colors.colors["black"]
+                self.colour: tuple[int, int, int, int] = colours.colours["black"]
         elif isinstance(d, tuple):
-            self.color: tuple[int, int, int, int] = d
+            self.colour: tuple[int, int, int, int] = d
         else:
-            self.color: tuple[int, int, int, int] = colors.colors["black"]
+            self.colour: tuple[int, int, int, int] = colours.colours["black"]
 
 def spliterator(
     text: str,
@@ -137,11 +202,11 @@ def from_dict(d: dict[int, str], settings: Settings) -> list[str]:
 
 def generate_table(
     text: Union[str, list[str], dict[int, str]],
-    color: Optional[ColorRGBA]=None,
+    colour: Optional[ColourRGBA]=None,
     *,
     settings: Optional[Settings]=None
 ) -> Image.Image:
-    settings, color = (settings or Settings()), (color or ColorRGBA("black"))
+    settings, colour = (settings or Settings()), (colour or ColourRGBA("black"))
     font, image = ImageFont.truetype(settings.DefultsFontPath, settings.FontSize), Image.open(settings.DefultsTablePath).convert("RGBA")
     new_image, image_draw = Image.new("RGBA", image.size, (0, 0, 0, 1)), ImageDraw.Draw(image)
 
@@ -160,7 +225,7 @@ def generate_table(
             xy=get_xy(i, idx, image, font, settings),
             font=font,
             align="left",
-            fill=color.color
+            fill=colour.colour
         )
 
     try:
