@@ -92,6 +92,16 @@ class ColoursRGBA:
     def get_colours(self, full_info: bool=True) -> Union[dict[str, tuple[int, int, int, int]], list[str]]:
         return (self.colours) if (full_info) else (list(self.colours.keys()))
     
+    def get_colour(self, colour: str) -> tuple[int, int, int, int]:
+        if colour in self.colours.keys():
+            return colour[colour]
+        else:
+            t = self.is_hexcolour(colour)
+            if t[0]:
+                return t[1]
+            else:
+                return self.colours["black"]
+    
     def add_colour(self, name: str, value: tuple[int, int, int, int]) -> None:
         if self.is_colour(value)[0]:
             self.colours[name] = value
@@ -114,18 +124,20 @@ class ColoursRGBA:
             self.add_hexcolour(i[0], i[1])
 
 class ColourRGBA:
-    def __init__(self, d: Union[str, tuple], *, colours: Optional[ColoursRGBA]=None) -> None:
+    def __init__(self, d: Union[str, tuple[int, int, int, int]], *, colours: Optional[ColoursRGBA]=None) -> None:
         colours = colours or ColoursRGBA()
         if isinstance(d, str):
-            try:
-                self.colour: tuple[int, int, int, int] = colours.colours[d]
-            except:
-                self.colour: tuple[int, int, int, int] = colours.colours["black"]
+            self.colors: tuple[int, int, int, int] = colours.get_colour(d)
         elif isinstance(d, tuple):
-            self.colour: tuple[int, int, int, int] = d
+            t = colours.is_colour(d)
+            if t[0]:
+                self.colour: tuple[int, int, int, int] = t[1]
+            else:
+                self.colour: tuple[int, int, int, int] = colours.colours["black"]
         else:
             self.colour: tuple[int, int, int, int] = colours.colours["black"]
 
+# Функции
 def spliterator(
     text: str,
     img: Image.Image,
@@ -200,12 +212,14 @@ def from_dict(d: dict[int, str], settings: Settings) -> list[str]:
             l.append(t)
     return l
 
+# Основные функции
 def generate_table(
     text: Union[str, list[str], dict[int, str]],
     colour: Optional[ColourRGBA]=None,
     *,
     settings: Optional[Settings]=None
 ) -> Image.Image:
+    """Generates a `Minecraft Sign` with a `caption` and `any colour`"""
     settings, colour = (settings or Settings()), (colour or ColourRGBA("black"))
     font, image = ImageFont.truetype(settings.DefultsFontPath, settings.FontSize), Image.open(settings.DefultsTablePath).convert("RGBA")
     new_image, image_draw = Image.new("RGBA", image.size, (0, 0, 0, 1)), ImageDraw.Draw(image)
