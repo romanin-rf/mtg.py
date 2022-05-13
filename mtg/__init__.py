@@ -1,6 +1,6 @@
 from . import mtg
 
 Settings: mtg.Settings = mtg.Settings
-Colours: mtg.ColourRGBA = mtg.ColourRGBA
+ColoursRGBA: mtg.ColoursRGBA = mtg.ColoursRGBA
 ColourRGBA: mtg.ColourRGBA = mtg.ColourRGBA
 generate_table: mtg.generate_table = mtg.generate_table

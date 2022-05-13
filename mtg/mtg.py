@@ -1,6 +1,9 @@
 import os
 import re
-from . import mtgdata
+try:
+    from . import mtgdata
+except:
+    import mtgdata
 from PIL import ImageDraw, ImageFont, Image
 from typing import Union, Optional, Any
 
@@ -94,7 +97,7 @@ class ColoursRGBA:
     
     def get_colour(self, colour: str) -> tuple[int, int, int, int]:
         if colour in self.colours.keys():
-            return colour[colour]
+            return self.colours[colour]
         else:
             t = self.is_hexcolour(colour)
             if t[0]:
@@ -127,7 +130,7 @@ class ColourRGBA:
     def __init__(self, d: Union[str, tuple[int, int, int, int]], *, colours: Optional[ColoursRGBA]=None) -> None:
         colours = colours or ColoursRGBA()
         if isinstance(d, str):
-            self.colors: tuple[int, int, int, int] = colours.get_colour(d)
+            self.colour: tuple[int, int, int, int] = colours.get_colour(d)
         elif isinstance(d, tuple):
             t = colours.is_colour(d)
             if t[0]:
@@ -175,10 +178,10 @@ def handler_text(
     if "\n" in text:
         text = text.replace("\n", " ")
     x_size = img.size[0] - (settings.StandartXY[0] * 2)
-    if not(font.getsize(text) <= x_size):
+    if not(font.getsize(text)[0] <= x_size):
         new_text = ""
         for i in text:
-            if font.getsize(new_text + i) >= x_size:
+            if font.getsize(new_text + i)[0] >= x_size:
                 return new_text
             else:
                 new_text += i
