@@ -85,11 +85,14 @@ class ColoursRGBA:
         if colour.startswith("#"):
             colour = colour[1:]
         # Проверка по длине и конвертация
-        if (len(colour) == 3) or (len(colour) == 4):
-            cl = [int(i, 16) for i in [(str(i)*2) for i in re.findall(r'.', colour)]]
-        elif (len(colour) == 6) or (len(colour) == 8):
-            cl = [int(i, 16) for i in re.findall(r'..', colour)]
-        else:
+        try:
+            if (len(colour) == 3) or (len(colour) == 4):
+                cl = [int(i, 16) for i in [(str(i)*2) for i in re.findall(r'.', colour)]]
+            elif (len(colour) == 6) or (len(colour) == 8):
+                cl = [int(i, 16) for i in re.findall(r'..', colour)]
+            else:
+                return None
+        except:
             return None
         if len(cl) != 4:
             cl.append(255)
@@ -123,6 +126,7 @@ class ColoursRGBA:
         self,
         colour: Union[str, tuple[int, int, int, int]]
     ) -> Union[tuple[int, int, int, int], None]:
+        """Принимает `colour`, возращает `tuple[int, int, int, int]`, в противном случае `None`"""
         colour_type = self.get_colour_type(colour)
         if colour_type == "name-colour":
             return self.colours[colour]
@@ -138,6 +142,7 @@ class ColoursRGBA:
         name: str,
         colour: Union[str, tuple[int, int, int, int]]
     ) -> None:
+        """`Добавляет`/`Заменяет` - `colour`, при необходимости конвертирует из `hex-colour`, в противном случает вызывает `NotAColourError`"""
         colour = self.get_colour(colour)
         if colour != None:
             self.colours[name] = colour
@@ -145,6 +150,7 @@ class ColoursRGBA:
             raise NotAColourError(colour=colour)
     
     def set_colours(self, data: dict[str, Union[str, tuple[int, int, int, int]]]) -> None:
+        """Анологичен `set_colour`, только `многократный`"""
         for i in data.items():
             self.set_colour(i[0], i[1])
 
@@ -154,6 +160,10 @@ class ColourRGBA:
         colour: Union[str, tuple[int, int, int, int]],
         colours: Optional[ColoursRGBA]=None
     ) -> None:
+        """\
+        Класс хранения `colour`, любого типа, при необходимости конвертирует.\
+        \n\nЕсли возникнет ошибка, то `colour` по умолчанию:\
+        \n- colour -> (0, 0, 0, 255)"""
         colours = colours or ColoursRGBA()
         self.colour: tuple[int, int, int, int] = colours.get_colour(colour) or colours.colours["black"]
 
@@ -224,6 +234,7 @@ def generate_table(
     colour: Optional[ColourRGBA]=None,
     settings: Optional[Settings]=None
 ) -> Union[Image.Image, None]:
+    """Генерирует `Image.Image` из `text`, при ошибке возыращает `None`."""
     settings, colour = (settings or Settings()), (colour or ColourRGBA("black"))
     font, image = ImageFont.truetype(settings.DefultsFontPath, settings.FontSize), Image.open(settings.DefultsTablePath).convert("RGBA")
     new_image, image_draw = Image.new("RGBA", image.size, (0, 0, 0, 1)), ImageDraw.Draw(image)
@@ -232,14 +243,17 @@ def generate_table(
     lines = splitator(text, image, font, settings)
 
     # Рисование текста на изображение
-    for idx, i in enumerate(lines):
-        image_draw.text(
-            xy=get_xy(i, idx, image, font, settings),
-            text=i,
-            fill=colour.colour,
-            font=font,
-            aling="left"
-        )
+    try:
+        for idx, i in enumerate(lines):
+            image_draw.text(
+                xy=get_xy(i, idx, image, font, settings),
+                text=i,
+                fill=colour.colour,
+                font=font,
+                aling="left"
+            )
+    except:
+        return None
 
     # Вывод
     try:
