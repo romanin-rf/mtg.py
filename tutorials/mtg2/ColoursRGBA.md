@@ -7,6 +7,8 @@
 >>> import mtg2
 >>> mtg2.ColoursRGBA()
 ColoursRGBA('white', 'black', 'red', 'green', 'blue', 'yellow', 'orange', 'pink', 'purple', 'cyan', 'gold', 'marine', 'brown')
+>>> mtg2.ColoursRGBA()["black"]
+(0, 0, 0, 255)
 ```
 
 ### Функции
