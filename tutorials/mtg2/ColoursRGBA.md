@@ -27,3 +27,10 @@ ColoursRGBA('white', 'black', 'red', 'green', 'blue', 'yellow', 'orange', 'pink'
 ```python
 mtg2.ColoursRGBA().is_rgba(colour: tuple[int, int, int, int]) -> bool
 ```
+### Пример
+```python
+>>> import mtg2
+>>> mtg2.ColoursRGBA().is_rgba((0, 255, 183, 185))
+False
+>>> mtg2.ColoursRGBA().is_rgba((256, 0, 128, 255))
+```
