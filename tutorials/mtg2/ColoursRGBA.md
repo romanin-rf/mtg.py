@@ -97,3 +97,27 @@ mtg2.ColoursRGBA().get_colour(colour: str | tuple[int, int, int, int]) -> tuple[
 >>> mtg2.ColoursRGBA().get_colour((255, 988, 10, 123))
 None
 ```
+## mtg2.ColoursRGBA().set_colour
+### Описание
+Функция принимает `name` и `colour`, ... , в пртивном случае вызывает исключение ***NotAColourError***.
+```python
+mtg2.ColoursRGBA().set_colour(name: str, colour: str | tuple[int, int, int, int]) -> None
+```
+### Пример
+```python
+>>> import mtg2
+>>> mtg2.ColoursRGBA().set_colour("kek", "f80122")
+None
+>>> mtg2.ColoursRGBA().set_colour("kek", "00000000000")
+NotAColourError: ...
+```
+## mtg2.ColoursRGBA().set_colour
+### Описание
+Функция принимает `name` и `data`, ... , в пртивном случае вызывает исключение ***NotAColourError***.
+```python
+mtg2.ColoursRGBA().set_colours(name: str, data: dict[str, str | tuple[int, int, int, int]]) -> None
+```
+### Пример
+```python
+# Я устал писать эти примеры, описывать каждое гавно для кого-то хотя по факту этим гавно буду пользовать только я и пару людей, НЕНАВИЖУ СВОЙ ПЕРФЕКЦИОНИЗМ
+```
