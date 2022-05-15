@@ -66,6 +66,9 @@ class ColoursRGBA:
             "marine": (0, 255, 179, 255),
             "brown": (125, 75, 0, 255)
         }
+    def __repr__(self):
+        return "{name}({colours})".format(name=self.__class__.__name__, colours=", ".join(list(self.colours.keys())))
+
     def is_rgba(
         self,
         colour: tuple[int, int, int, int]
@@ -166,6 +169,9 @@ class ColourRGBA:
         \n- colour -> (0, 0, 0, 255)"""
         colours = colours or ColoursRGBA()
         self.colour: tuple[int, int, int, int] = colours.get_colour(colour) or colours.colours["black"]
+    
+    def __repr__(self):
+        return "{name}({colour})".format(name=self.__class__.__name__, colour=", ".join([str(i) for i in self.colour]))
 
 # Функции расчёта
 def get_xy(
