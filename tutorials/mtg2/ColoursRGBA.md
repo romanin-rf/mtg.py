@@ -6,7 +6,7 @@
 ```python
 >>> import mtg2
 >>> mtg2.ColoursRGBA()
-ColoursRGBA(white, black, red, green, blue, yellow, orange, pink, purple, cyan, gold, marine, brown)
+ColoursRGBA('white', 'black', 'red', 'green', 'blue', 'yellow', 'orange', 'pink', 'purple', 'cyan', 'gold', 'marine', 'brown')
 ```
 
 ### Функции
