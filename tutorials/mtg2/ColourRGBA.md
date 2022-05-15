@@ -18,4 +18,12 @@
 >>> import mtg2
 >>> mtg2.ColourRGBA("black")
 ColourRGBA(0, 0, 0, 255)
+>>> mtg2.ColourRGBA("fff")
+ColourRGBA(255, 255, 255, 255)
+>>> mtg2.ColourRGBA("f0f")
+ColourRGBA(255, 0, 255, 255)
+>>> mtg2.ColourRGBA("00f0")
+ColourRGBA(0, 0, 255, 0)
+>>> mtg2.ColourRGBA("#00ff00ff") # Также можно с #
+ColourRGBA(0, 255, 0, 255)
 ```
