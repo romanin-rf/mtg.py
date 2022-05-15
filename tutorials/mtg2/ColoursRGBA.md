@@ -13,8 +13,8 @@ ColoursRGBA('white', 'black', 'red', 'green', 'blue', 'yellow', 'orange', 'pink'
 
 ### Функции
 - [mtg2.ColoursRGBA.is_rgba](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbais_rgba)
-- [mtg2.ColoursRGBA.hex_to_rgba]()
-- [mtg2.ColoursRGBA.get_colour_type]()
+- [mtg2.ColoursRGBA.hex_to_rgba](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbahex_to_rgba)
+- [mtg2.ColoursRGBA.get_colour_type](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbahex_to_rgba)
 - mtg2.ColoursRGBA.get_colour
 - mtg2.ColoursRGBA.set_colour
 - mtg2.ColoursRGBA.set_colours
@@ -77,5 +77,23 @@ mtg2.ColoursRGBA.get_colour_type(colour: str | tuple[int, int, int, int]) -> Lit
 >>> mtg2.ColoursRGBA().get_colour_type((255, 55, 0, 78))
 'rgba-colour'
 >>> mtg2.ColoursRGBA().get_colour_type("f80f1")
+None
+```
+## mtg2.ColoursRGBA().get_colour
+### Описание
+Функция принимает `colour` в виде ***str*** или ***tuple[int, int, int, int]*** и конвертирует `hex-цвет` если нужно, возвращает `rgba-цвет` в виде ***tuple[int, int, int, int]***, в противном случае возвращает ***None***. *Эта функция может служить проверкой данных на то являються ли они цветом.*
+```python
+mtg2.ColoursRGBA().get_colour(colour: str | tuple[int, int, int, int]) -> tuple[int, int, int, int] | None
+```
+### Пример
+```python
+>>> import mtg2
+>>> mtg2.ColoursRGBA().get_colour("black")
+(0, 0, 0, 255)
+>>> mtg2.ColoursRGBA().get_colour("fff")
+(255, 255, 255, 255)
+>>> mtg2.ColoursRGBA().get_colour((255, 99, 10, 123))
+(255, 99, 10, 123)
+>>> mtg2.ColoursRGBA().get_colour((255, 988, 10, 123))
 None
 ```
