@@ -1,7 +1,7 @@
 # Туториалы
 ## Классы
-- [mtg2.ColourRGBA](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColourRGBA.md#mtg2colourrgba)
-- mtg2.ColoursRGBA
+- [mtg2.ColourRGBA](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColourRGBA.md)
+- [mtg2.ColoursRGBA](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md)
     - mtg2.ColoursRGBA.get_colour
     - mtg2.ColoursRGBA.set_colour
     - mtg2.ColoursRGBA.get_colour_type
