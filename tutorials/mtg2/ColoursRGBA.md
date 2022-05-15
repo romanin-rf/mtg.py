@@ -10,7 +10,7 @@ ColoursRGBA(white, black, red, green, blue, yellow, orange, pink, purple, cyan, 
 ```
 
 ### Функции
-- mtg2.ColoursRGBA.is_rgba
+- [mtg2.ColoursRGBA.is_rgba](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbais_rgba)
 - mtg2.ColoursRGBA.hex_to_rgba
 - mtg2.ColoursRGBA.get_colour_type
 - mtg2.ColoursRGBA.get_colour
