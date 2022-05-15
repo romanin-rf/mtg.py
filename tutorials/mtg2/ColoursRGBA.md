@@ -16,8 +16,8 @@ ColoursRGBA('white', 'black', 'red', 'green', 'blue', 'yellow', 'orange', 'pink'
 - [mtg2.ColoursRGBA.hex_to_rgba](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbahex_to_rgba)
 - [mtg2.ColoursRGBA.get_colour_type](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbaget_colour_type)
 - [mtg2.ColoursRGBA.get_colour](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbaget_colour)
-- [mtg2.ColoursRGBA.set_colour]()
-- [mtg2.ColoursRGBA.set_colours]()
+- [mtg2.ColoursRGBA.set_colour](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbaset_colour)
+- [mtg2.ColoursRGBA.set_colours](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbaset_colours)
 
 <hr>
 
