@@ -13,7 +13,7 @@
               ```
     - Перередовать в `colours`, нужно класс [mtg2.ColorsRGBA()](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md), ***но не обязательно***
 
-### Примеры
+### Пример
 ```python
 >>> import mtg2
 >>> mtg2.ColourRGBA("black")
