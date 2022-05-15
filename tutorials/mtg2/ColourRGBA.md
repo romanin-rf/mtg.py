@@ -12,3 +12,10 @@
               (int >= 0) and (int <= 255)
               ```
     - Перередовать в `colours`, нужно класс [mtg2.ColorsRGBA()](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md), ***но не обязательно***
+
+### Примеры
+```python
+>>> import mtg2
+>>> mtg2.ColourRGBA("black")
+ColourRGBA(0, 0, 0, 255)
+```
