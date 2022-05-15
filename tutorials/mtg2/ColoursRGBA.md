@@ -13,8 +13,8 @@ ColoursRGBA('white', 'black', 'red', 'green', 'blue', 'yellow', 'orange', 'pink'
 
 ### Функции
 - [mtg2.ColoursRGBA.is_rgba](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbais_rgba)
-- mtg2.ColoursRGBA.hex_to_rgba
-- mtg2.ColoursRGBA.get_colour_type
+- [mtg2.ColoursRGBA.hex_to_rgba]()
+- [mtg2.ColoursRGBA.get_colour_type]()
 - mtg2.ColoursRGBA.get_colour
 - mtg2.ColoursRGBA.set_colour
 - mtg2.ColoursRGBA.set_colours
@@ -57,7 +57,7 @@ None
 - 'rgba-colour'
     - это тип цвета в виде ***tuple[int, int, int, int]***
 - 'hex-colour'
-    - это тип цвета в виде ***str*** ([пример выше]())
+    - это тип цвета в виде ***str*** ([пример выше](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#пример-2))
 - 'name-colour'
     - это тип цвета, являеться `name` в классе [mtg2.ColoursRGBA](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#пример)
 
