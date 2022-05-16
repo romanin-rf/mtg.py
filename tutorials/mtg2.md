@@ -9,3 +9,5 @@
     - [mtg2.ColoursRGBA.set_colour](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbaset_colour)
     - [mtg2.ColoursRGBA.set_colours](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbaset_colours)
 - [mtg2.Settings](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/Settings.md#mtg2settings)
+## Функции
+- [mtg2.generate_table]()
