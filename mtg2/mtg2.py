@@ -26,9 +26,9 @@ class NotAColourError(Exception):
 class Settings:
     def __init__(
         self,
-        std_xy: tuple[float, float]=(20.0, 50.0),
-        font_size: int=72,
         max_lines: int=4,
+        font_size: int=72,
+        std_xy: tuple[float, float]=(20.0, 50.0),
         spacing_xy: tuple[float, float]=(20.0, 105.0),
         dpath_table: Optional[str]=None,
         dpath_font: Optional[str]=None
