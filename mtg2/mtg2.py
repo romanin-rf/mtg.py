@@ -66,8 +66,12 @@ class ColoursRGBA:
             "marine": (0, 255, 179, 255),
             "brown": (125, 75, 0, 255)
         }
+    
     def __repr__(self):
-        return "{name}({colours})".format(name=self.__class__.__name__, colours=", ".join(list(self.colours.keys())))
+        return "{name}({colours})".format(name=self.__class__.__name__, colours=", ".join([("'" + i + "'") for i in self.colours.keys()]))
+
+    def __getitem__(self, key: str) -> tuple[int, int, int, int]:
+        return self.colours[key]
 
     def is_rgba(
         self,
@@ -102,8 +106,6 @@ class ColoursRGBA:
         # Проверка на правильность
         if self.is_rgba(tuple(cl)):
             return tuple(cl)
-        else:
-            return None
 
     def get_colour_type(
         self,
@@ -115,15 +117,9 @@ class ColoursRGBA:
                 return "name-colour"
             if self.hex_to_rgba(colour) != None:
                 return "hex-colour"
-            else:
-                return None
         elif isinstance(colour, tuple):
             if self.is_rgba(colour):
                 return "rgba-colour"
-            else:
-                return None
-        else:
-            return None
     
     def get_colour(
         self,
@@ -137,8 +133,6 @@ class ColoursRGBA:
             return colour
         elif colour_type == "hex-colour":
             return self.hex_to_rgba(colour)
-        else:
-            return None
     
     def set_colour(
         self,
@@ -258,11 +252,7 @@ def generate_table(
                 font=font,
                 aling="left"
             )
-    except:
-        return None
-
-    # Вывод
-    try:
+        # Вывод
         return Image.alpha_composite(image, new_image)
     except:
         return None
