@@ -114,10 +114,12 @@ NotAColourError: ...
 ## mtg2.ColoursRGBA().set_colours
 ### Описание
 Функция принимает `name` и `data`, ... , в пртивном случае вызывает исключение ***NotAColourError***.
+
+Это тоже самое что [mtg2.ColoursRGBA().set_colour](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/ColoursRGBA.md#mtg2coloursrgbaset_colour) только многократный.
 ```python
 mtg2.ColoursRGBA().set_colours(name: str, data: dict[str, str | tuple[int, int, int, int]]) -> None
 ```
 ### Пример
 ```python
-# Я устал писать эти примеры, описывать каждое гавно для кого-то хотя по факту этим гавно буду пользовать только я и пару людей, НЕНАВИЖУ СВОЙ ПЕРФЕКЦИОНИЗМ
+
 ```
