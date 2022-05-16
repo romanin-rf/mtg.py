@@ -110,7 +110,7 @@ class ColoursRGBA:
     def get_colour_type(
         self,
         colour: Union[str, tuple[int, int, int, int]]
-    ) -> Union[Union[Literal['rgba-colour'], Literal['hex-colour'], Literal['name-colour']], None]:
+    ) -> Union[Literal['rgba-colour', 'hex-colour', 'name-colour'], None]:
         """Определяет тип цвета.\n\nСуществующие типы цветов: `rgba-colour`, `hex-colour`, `name-colour`"""
         if isinstance(colour, str):
             if colour in self.colours.keys():
