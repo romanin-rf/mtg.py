@@ -1,6 +1,6 @@
 ## mtg2.Settings()
 ### Описание
-Данный класс являеться настройкой простой настройкой для функции [mtg2.generate_table]().
+Данный класс являеться настройкой простой настройкой для функции [mtg2.generate_table](https://github.com/romanin-rf/mtg.py/blob/main/tutorials/mtg2/generate_table.md#mtg2generate_table).
 ```python
 settings = mtg2.Settings(
      max_lines: int=4,
