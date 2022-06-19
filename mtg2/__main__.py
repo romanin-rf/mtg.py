@@ -6,5 +6,6 @@ settings = mtg2.Settings(
     std_xy=(20., 40.0),
     spacing_xy=(20.0, 92.5)
 )
+colour = mtg2.ColourRGBA("ff8800")
 
-mtg2.generate_table("Hello, world! This testing is new settings! qwertyuiopasdfghjklzxcvbnm йцукенгшщзхъфывапролджэячсмитьбю 1234567890 +-*/|\\", settings=settings).show()
+mtg2.generate_table("TEXT", colour, settings=settings).save("j.png")

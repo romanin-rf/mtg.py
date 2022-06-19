@@ -5,11 +5,11 @@ try:
 except:
     import mtgdata
 from PIL import ImageDraw, ImageFont, Image
-from typing import Union, Optional, Literal, Any
+from typing import Dict, Tuple
 
 # Классы-исключения
 class NotAColourError(Exception):
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs):
         """Вызываеться, если данные не являються цветом"""
         if len(args) == 0:
             if "colour" in kwargs.keys():
@@ -19,20 +19,20 @@ class NotAColourError(Exception):
         else:
             self.msg = " ".join([str(i) for i in args])
     
-    def __str__(self) -> str:
+    def __str__(self):
         return self.msg
 
 # Класс настройки
 class Settings:
     def __init__(
         self,
-        max_lines: int=4,
-        font_size: int=72,
-        std_xy: tuple[float, float]=(20.0, 50.0),
-        spacing_xy: tuple[float, float]=(20.0, 105.0),
-        dpath_table: Optional[str]=None,
-        dpath_font: Optional[str]=None
-    ) -> None:
+        max_lines=4,
+        font_size=72,
+        std_xy=(20.0, 50.0),
+        spacing_xy=(20.0, 105.0),
+        dpath_table=None,
+        dpath_font=None
+    ):
         """Класс настройки, a именно:\n\n\
         - `расположение текста` (std_xy)\n\
         - `размер текста` (font_size)\n\
@@ -43,15 +43,15 @@ class Settings:
         """
         self.MaxLines: int = max_lines
         self.FontSize: int = font_size
-        self.StandartXY: tuple[float, float] = std_xy
-        self.Spacing: tuple[int, int] = spacing_xy
+        self.StandartXY: Tuple[float, float] = std_xy
+        self.Spacing: Tuple[int, int] = spacing_xy
         self.DefultsTablePath = mtgdata.default_table_path if (dpath_table is None) else os.path.abspath(dpath_table)
         self.DefultsFontPath = mtgdata.default_font_path if (dpath_font is None) else os.path.abspath(dpath_font)
 
 class ColoursRGBA:
-    def __init__(self) -> None:
+    def __init__(self):
         """Класс для работы с `rgba-colour`\n\nИспользуеться как настройки для класса `ColorRGBA`"""
-        self.colours: dict[str, tuple[int, int, int, int]] = {
+        self.colours: Dict[str, Tuple[int, int, int, int]] = {
             "white": (255, 255, 255, 255),
             "black": (0, 0, 0, 255),
             "red": (255, 0, 0, 255),
@@ -70,23 +70,17 @@ class ColoursRGBA:
     def __repr__(self):
         return "{name}({colours})".format(name=self.__class__.__name__, colours=", ".join([("'" + i + "'") for i in self.colours.keys()]))
 
-    def __getitem__(self, key: str) -> tuple[int, int, int, int]:
+    def __getitem__(self, key):
         return self.colours[key]
 
-    def is_rgba(
-        self,
-        colour: tuple[int, int, int, int]
-    ) -> bool:
+    def is_rgba(self, colour):
         """Проверяет являеються ли `данные` в виде `tuple` - `rgba-colour`"""
         for i in colour:
             if not((i >= 0) and (i <= 255)):
                 return False
         return True
 
-    def hex_to_rgba(
-        self,
-        colour: str
-    ) -> Union[tuple[int, int, int, int], None]:
+    def hex_to_rgba(self, colour):
         """Получает `hex-colour` в виде `str`, и возвращает `rgba-colour` в виде `tuple`, в противном случае - `None`"""
         # Срезание, если нужно
         if colour.startswith("#"):
@@ -107,10 +101,7 @@ class ColoursRGBA:
         if self.is_rgba(tuple(cl)):
             return tuple(cl)
 
-    def get_colour_type(
-        self,
-        colour: Union[str, tuple[int, int, int, int]]
-    ) -> Union[Literal['rgba-colour', 'hex-colour', 'name-colour'], None]:
+    def get_colour_type(self, colour):
         """Определяет тип цвета.\n\nСуществующие типы цветов: `rgba-colour`, `hex-colour`, `name-colour`"""
         if isinstance(colour, str):
             if colour in self.colours.keys():
@@ -121,10 +112,7 @@ class ColoursRGBA:
             if self.is_rgba(colour):
                 return "rgba-colour"
     
-    def get_colour(
-        self,
-        colour: Union[str, tuple[int, int, int, int]]
-    ) -> Union[tuple[int, int, int, int], None]:
+    def get_colour(self, colour):
         """Принимает `colour`, возращает `tuple[int, int, int, int]`, в противном случае `None`"""
         colour_type = self.get_colour_type(colour)
         if colour_type == "name-colour":
@@ -134,11 +122,7 @@ class ColoursRGBA:
         elif colour_type == "hex-colour":
             return self.hex_to_rgba(colour)
     
-    def set_colour(
-        self,
-        name: str,
-        colour: Union[str, tuple[int, int, int, int]]
-    ) -> None:
+    def set_colour(self, name, colour):
         """`Добавляет`/`Заменяет` - `colour`, при необходимости конвертирует из `hex-colour`, в противном случает вызывает `NotAColourError`"""
         colour = self.get_colour(colour)
         if colour != None:
@@ -146,47 +130,38 @@ class ColoursRGBA:
         else:
             raise NotAColourError(colour=colour)
     
-    def set_colours(self, data: dict[str, Union[str, tuple[int, int, int, int]]]) -> None:
+    def set_colours(self, data):
         """Анологичен `set_colour`, только `многократный`"""
         for i in data.items():
             self.set_colour(i[0], i[1])
 
 class ColourRGBA:
-    def __init__(
-        self,
-        colour: Union[str, tuple[int, int, int, int]],
-        colours: Optional[ColoursRGBA]=None
-    ) -> None:
+    def __init__(self, colour, colours=None):
         """\
         Класс хранения `colour`, любого типа, при необходимости конвертирует.\
         \n\nЕсли возникнет ошибка, то `colour` по умолчанию:\
         \n- colour -> (0, 0, 0, 255)"""
         colours = colours or ColoursRGBA()
-        self.colour: tuple[int, int, int, int] = colours.get_colour(colour) or colours.colours["black"]
+        self.colour: Tuple[int, int, int, int] = colours.get_colour(colour) or colours.colours["black"]
     
     def __repr__(self):
         return "{name}({colour})".format(name=self.__class__.__name__, colour=", ".join([str(i) for i in self.colour]))
 
 # Функции расчёта
 def get_xy(
-    text: str,
-    idx: int,
-    img: Image.Image,
-    font: Union[ImageFont.FreeTypeFont, ImageFont.ImageFont],
-    settings: Settings
-) -> tuple[float, float]:
+    text,
+    idx,
+    img,
+    font,
+    settings
+):
     text_size = font.getsize(text)
     x, y = settings.StandartXY
     x += ((img.size[0] - (settings.Spacing[0] * 2)) - text_size[0]) / 2
     y += (settings.Spacing[1] * idx)
     return x, y
 
-def splitator(
-    text: Union[str, list[str], dict[int, str]],
-    img: Image.Image,
-    font: Union[ImageFont.FreeTypeFont, ImageFont.ImageFont],
-    settings: Settings
-) -> list[str]:
+def splitator(text, img, font, settings):
     max_x = img.size[0] - (settings.Spacing[0] * 2)
     if isinstance(text, str):
         text, l, idx = text.replace("\n", " "), [], 0
@@ -229,11 +204,7 @@ def splitator(
         return ["HandlerText", "TypeError"]
 
 # Основная функция
-def generate_table(
-    text: Union[str, list[str], dict[int, str]],
-    colour: Optional[ColourRGBA]=None,
-    settings: Optional[Settings]=None
-) -> Union[Image.Image, None]:
+def generate_table(text, colour=None, settings=None):
     """Генерирует `Image.Image` из `text`, при ошибке возыращает `None`."""
     settings, colour = (settings or Settings()), (colour or ColourRGBA("black"))
     font, image = ImageFont.truetype(settings.DefultsFontPath, settings.FontSize), Image.open(settings.DefultsTablePath).convert("RGBA")
@@ -255,4 +226,4 @@ def generate_table(
         # Вывод
         return Image.alpha_composite(image, new_image)
     except:
-        return None
+        pass
